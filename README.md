@@ -1,18 +1,43 @@
-# Analyse du Trafic Routier à Paris (MySQL & Power BI)
+# 🚦 Tableau de Bord - Analyse du Trafic Routier Parisien
 
-Conception d'une chaîne décisionnelle complète (ETL SQL et Business Intelligence) à partir des données Open Data de la Ville de Paris (*Comptages routiers permanents*).
+> Projet de Business Intelligence & Data Engineering visant à analyser, modéliser et restituer les flux de circulation de la ceinture parisienne (Périphérique Intérieur/Extérieur).
 
-## 1. Architecture Technique & Pipeline de Données
+---
 
-`Open Data Paris` ➔ `MySQL 8.0 / Navicat` ➔ `Power BI Desktop`
+## 📌 Aperçu du Dashboard
 
-* **Échantillonnage (`00_echantillonnage.sql`)** : Extraction maîtrisée pour garantir la fluidité des traitements[cite: 6].
-* **Normalisation des schémas (`01_` à `05_`)** : Identification des colonnes, renommage standardisé et nettoyage des caractères accentués[cite: 6].
-* **Typage temporel (`06_` & `07_`)** : Conversion stricte des formats `DATE` / `DATETIME`[cite: 6].
-* **Traitement géographique (`08_splitGeo...`)** : Découpage des coordonnées brutes en `Latitude` / `Longitude`[cite: 6].
+### 1. Macro Synthèse & Prévisions (Page 1)
+*Description rapide de la vue macro et des choix techniques.*
+> ![Aperçu Page 1](./docs/screenshots/page1_synthese.png)
 
-## 2. Restitution & Analyse sous Power BI (`parisTraficDatavizz_01.pbix`)
+### 2. Analyse Spatiale & Cartographie (Page 2)
+*Mise en valeur de la répartition géographique des capteurs et des pics d'occupation.*
+> ![Aperçu Page 2](./docs/screenshots/page2_spatial.png)
 
-* **Page 1 — `syntheseTrafic` (Vue Macro)** : Indicateurs globaux de charge routière + **cône de prévision** natif à court terme.
-* **Page 2 — `analyseSpatiale` (Cartographie & Facteurs Racines)** : Carte interactive du réseau parisien + **arbre de décomposition intelligente** pour isoler les facteurs de saturation.
-* **Page 3 — `analyseTemporelle` (Dynamique Chronologique)** : Évolution des flux dans le temps + **détection automatique d'anomalies**.# AJCdataVizz
+### 3. Analyse Temporelle & Indicateurs Critiques (Page 3)
+*Mise en avant des mesures DAX temporelles (`Heure_Pointe_Critique`, `Debit_Max_Horaire`, `Heures_Saturees`).*
+> ![Aperçu Page 3](./docs/screenshots/page3_temporel.png)
+
+---
+
+## 🛠️ Stack Technique & Architecture
+* **Source des données :** Open Data Paris (`comptages-routiers-permanents`).
+* **Stockage & ETL :** MySQL 8.0, Talend Open Studio (pipelines de transformation).
+* **Restitution & DAX :** Microsoft Power BI (Modélisation en étoile, mesures DAX avancées).
+
+## 💡 Extraits de code DAX clés (`/dax`)
+Exemple de mesure calculée pour l'heure de pointe critique :
+```dax
+Heure_Pointe_Critique = 
+VAR HeureMax = 
+    CALCULATE(
+        SELECTEDVALUE('ta_table'[Heure_Comptage]),
+        TOPN(
+            1,
+            ALL('ta_table'[Heure_Comptage]),
+            CALCULATE(SUM('ta_table'[Debit_h])),
+            DESC
+        )
+    )
+RETURN
+    IF(NOT(ISBLANK(HeureMax)), FORMAT(HeureMax, "00") & "h", "N/A")
