@@ -24,8 +24,8 @@
 * **Restitution & DAX :** Microsoft Power BI (Modélisation en étoile, mesures DAX avancées).
 
 ## 💡 Extraits de code DAX clés (`/dax`)
+``` DAX
 Exemple de mesure calculée pour l'heure de pointe critique :
-```dax
 Heure_Pointe_Critique = 
 VAR HeureMax = 
     CALCULATE(
@@ -39,3 +39,12 @@ VAR HeureMax =
     )
 RETURN
     IF(NOT(ISBLANK(HeureMax)), FORMAT(HeureMax, "00") & "h", "N/A")
+```
+
+## 💡 Focus Technique : Logique DAX
+
+En tant que profil orienté Data Engineering & SQL, la modélisation tabulaire sous Power BI a été un terrain d'exploration passionnant. Voici un aperçu de trois mesures clés implémentées pour piloter l'analyse temporelle et critique :
+
+* **`Heure_Pointe_Critique`** : Isole l'heure enregistrant le pic maximal de trafic global à l'aide d'un classement (`TOPN` trié par débit décroissant) et met en forme le résultat textuel (`FORMAT` en heures).
+* **`Debit_Max_Horaire`** : Équivalent d'un `SELECT MAX()` global, cette mesure utilise un `MAXX` couplé à un `ALL()` pour s'affranchir des filtres de contexte et capturer le débit maximal absolu de la ceinture parisienne.
+* **`Heures_Saturees`** : Exploite un `DISTINCTCOUNT` filtré via l'opérateur `IN` pour dénombrer précisément le volume horaire critique où l'état du trafic bascule en "Saturé" ou "Bloqué".
