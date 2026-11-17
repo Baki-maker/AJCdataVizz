@@ -8,17 +8,15 @@
 
 ### 1. Macro Synthèse & Prévisions (Page 1)
 *Description rapide de la vue macro et des choix techniques.*
-> ![Aperçu Page 1](./docs/screenshots/page1_synthese.png)
+![Aperçu Page 1](./Capture_ecran_dataVizz_page1.png)
 
 ### 2. Analyse Spatiale & Cartographie (Page 2)
 *Mise en valeur de la répartition géographique des capteurs et des pics d'occupation.*
-> ![Aperçu Page 2](./docs/screenshots/page2_spatial.png)
+![Aperçu Page 1](./Capture_ecran_dataVizz_page2.png)
 
 ### 3. Analyse Temporelle & Indicateurs Critiques (Page 3)
 *Mise en avant des mesures DAX temporelles (`Heure_Pointe_Critique`, `Debit_Max_Horaire`, `Heures_Saturees`).*
-> ![Aperçu Page 3](./docs/screenshots/page3_temporel.png)
-
----
+![Aperçu Page 1](./Capture_ecran_dataVizz_page3.png)
 
 ## 🛠️ Stack Technique & Architecture
 * **Source des données :** Open Data Paris (`comptages-routiers-permanents`).
